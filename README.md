@@ -1,0 +1,2 @@
+# Inha_CO2_geostats
+Our primary focus revolves around the development of a geostatistical modeling workflow, utilizing both GSLIB and Python (supplemented with Geostatspy by Dr. Pyrcz), with a specific emphasis on characterizing CO2 storage. In our research, we will explore both Kriging-based and Multi-point statistics methods, carefully evaluating the resulting uncertainty in the subsurface. Subsequently, we will utilize subsurface flow simulation, such as MRST, to estimate the development of the CO2 plume.
