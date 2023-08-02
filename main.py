@@ -43,14 +43,14 @@ class Gen_TwoGeoStats():
                          horizon_grid_size = 1, 
                          vertical_grid_size = 1, 
                          grid_mn=[0.5, 0.5, 0.5]):
-        variogram = geostats.make_variogram(**self.Vario)
+        # variogram = geostats.make_variogram(**self.Vario)
         return {
                 "nreal": self.num_real,
                 "df_": self.data,
                 "Val_range": val_range,
-                "xcol": "X",
-                "ycol": "Y",
-                "zcol": "Z",
+                "xcol": "X_i",
+                "ycol": "Y_i",
+                "zcol": "Z_i",
                 "vcol": val_name,
                 "nx_cells": self.grid_dim[0],
                 "ny_cells": self.grid_dim[1],
@@ -61,13 +61,13 @@ class Gen_TwoGeoStats():
                 "hmn_med": grid_mn[1],
                 "zmn_ver": grid_mn[2],
                 "seed": self.seed,
-                "var": variogram,
+                "var": self.Vario,
                 "output_file": "sgsim.out"
             }
             
     
     def sgsim_realizations(self, val_name, val_range):
-        sim = sgsim(**self.create_snesim_model(val_name, val_range))
+        sim = sgsim(**self.create_sgs_model(val_name, val_range))
         return sim
         
     def __version__(self):
