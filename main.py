@@ -43,14 +43,14 @@ class Gen_TwoGeoStats():
                          horizon_grid_size = 1, 
                          vertical_grid_size = 1, 
                          grid_mn=[0.5, 0.5, 0.5]):
-        # variogram = geostats.make_variogram(**self.Vario)
+        variogram = geostats.make_variogram_3D(**self.Vario)
         return {
                 "nreal": self.num_real,
                 "df_": self.data,
                 "Val_range": val_range,
                 "xcol": "X_i",
-                "ycol": "Y_i",
-                "zcol": "Z_i",
+                "ycol": "Y_j",
+                "zcol": "Z_k",
                 "vcol": val_name,
                 "nx_cells": self.grid_dim[0],
                 "ny_cells": self.grid_dim[1],
@@ -61,7 +61,7 @@ class Gen_TwoGeoStats():
                 "hmn_med": grid_mn[1],
                 "zmn_ver": grid_mn[2],
                 "seed": self.seed,
-                "var": self.Vario,
+                "var": variogram,
                 "output_file": "sgsim.out"
             }
             
@@ -80,14 +80,7 @@ class Gen_TwoGeoStats():
                 shutil.copyfile(file,f'seed_{seed}/{file}')
 
         # make training image file
-        TI = np.load(TI_file)
-        with open(f"angle_{angle}/train.dat", "w") as f:
-            f.write("train image \n")
-            f.write("1 \n")
-            f.write("value \n")
-            for i in TI.flatten():
-                f.write(f"{int(i)} \n")
-        os.chdir(f'angle_{angle}')
+        os.chdir(f'seed_{seed}')
         os.system(f"snesim.exe < snesim.par")       
         np.save('mps_reals.npy', np.loadtxt(f"snesim.out",skiprows = 4)[:,0].reshape(self.num_real, self.grid_dim[-1], self.grid_dim[-2], self.grid_dim[-3]))
 
@@ -98,6 +91,7 @@ class Gen_TwoGeoStats():
         os.remove(f"train.dat")
         
         
+
 
 if __name__ == '__main__':
     gen_real = Gen_TwoGeoStats()

@@ -15,6 +15,8 @@ def sgsim(nreal, df_, xcol, ycol, zcol, vcol, Val_range, nx_cells, ny_cells, nz,
 
 
     """
+    if os.path.isfile("data_temp.dat"):
+        os.remove("data_temp.dat")
     x = df_[xcol]
     y = df_[ycol]
     z = df_[zcol]
@@ -44,7 +46,9 @@ def sgsim(nreal, df_, xcol, ycol, zcol, vcol, Val_range, nx_cells, ny_cells, nz,
     max_range_v = hmin1
     hctab = int(max_range / hsiz) * 2 + 1
     vctab = int(max_range_v / vsiz) * 2 + 1
-
+    
+    if os.path.isfile("sgsim.par"):
+        os.remove("sgsim.par")
     with open("sgsim.par", "w") as f:
         f.write("              Parameters for SGSIM                                         \n")
         f.write("              ********************                                         \n")
@@ -100,6 +104,10 @@ def sisim(nreal, df_, xcol, ycol, zcol, vcol, nx_cells, ny_cells, nz, hsiz, vsiz
     """Sequential Gaussian simulation, 2D wrapper for sgsim from GSLIB (.exe
     must be available in PATH or working directory).
     """
+    
+
+    if os.path.isfile("data_temp.dat"):
+        os.remove("data_temp.dat")
     x = df_[xcol]
     y = df_[ycol]
     z = df_[zcol]
@@ -129,6 +137,8 @@ def sisim(nreal, df_, xcol, ycol, zcol, vcol, nx_cells, ny_cells, nz, hsiz, vsiz
     max_range_v = 3
     hctab = int(max_range / hsiz) * 2 + 1
 
+    if os.path.isfile("sisim.par"):
+        os.remove("sisim.par")
     with open("sisim.par", "w") as f:
         f.write("              Parameters for SISIM                                         \n")
         f.write("              ********************                                         \n")
@@ -192,7 +202,7 @@ def create_sgs_model(dataframe, vario_dictionary, Val_name,
                      Val_range, Num_real, 
                      horizon_grid_size = 1, vertical_grid_size = 1, 
                      grid_dim = [64,64,7], grid_mn=[0.5, 0.5, 0.5], seed = 77777):
-    variogram = geostats.make_variogram_3D(**vario_dictionary)
+    variogram = geostats.make_variogram(**vario_dictionary)
     sgs_model = {
         "nreal": Num_real,
         "df_": dataframe,
@@ -211,7 +221,7 @@ def create_sgs_model(dataframe, vario_dictionary, Val_name,
         "zmn_ver": grid_mn[2],
         "seed": seed,
         "var": variogram,
-        "output_file": "sgsim3d.out"
+        "output_file": "sgsim.out"
     }
     return sgs_model
 
